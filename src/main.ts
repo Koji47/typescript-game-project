@@ -26,9 +26,10 @@ let life = 3,
 const paddleWidth = 100,
   paddleHeight = 20,
   paddleMarginBottom = 50,
+  ballRadius = 8,
   BG_IMG = new Image();
-
 BG_IMG.src = "src/assets/BG_IMG.jpg";
+
 // paddle starting position
 const paddleX = canvas.width - paddleWidth;
 
@@ -40,9 +41,6 @@ const paddle = {
   height: paddleHeight,
   dx: 5,
 };
-
-// Ball
-const ballRadius = 8;
 
 // ball variables
 const ball = {
@@ -93,6 +91,7 @@ function draw() {
 function update() {
   movePaddle();
   moveBall();
+  ballCollisionWall();
 }
 
 // game loop
@@ -103,6 +102,24 @@ function loop() {
   requestAnimationFrame(loop);
 }
 loop();
+
+function ballCollisionWall() {
+  if (!canvas) {
+    throw new Error("Error with canvas selector");
+  }
+
+  if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0) {
+    ball.dx = -ball.dx;
+  }
+
+  if (ball.y - ball.radius < 0) {
+    ball.dy = -ball.dy;
+  }
+
+  if (ball.y + ball.radius > canvas.height) {
+    life = life - 1;
+  }
+}
 
 // Bricks
 let rowCount = 5,
