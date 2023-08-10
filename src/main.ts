@@ -1,5 +1,3 @@
-// import "./style.css";
-
 // Query selectors
 const canvas = document.querySelector<HTMLCanvasElement>("#brickBreaker");
 
@@ -71,18 +69,25 @@ function drawBall(): void {
   }
   context.beginPath();
   context.arc(ball.x, ball.y, ballRadius, 0, Math.PI * 2);
-
+  context.fillStyle = "#5a00b4";
+  context.fill();
+  context.strokeStyle = "#300066";
   context.stroke();
   context.closePath();
 }
 
 function draw() {
   drawPaddle();
-
   drawBall();
 }
-
 draw();
+
+function moveBall() {
+  ball.x += ball.dx;
+  ball.y += ball.dy;
+}
+
+function update() {}
 
 // Bricks
 let rowCount = 5,
@@ -112,19 +117,6 @@ let rowCount = 5,
 // }
 // };
 
-function movePaddle(): void {
-  if (!canvas) {
-    throw new Error("Error with canvas selector");
-  }
-  // keeps paddle from going too far right
-  if (paddleGoRight && paddle.x + paddleWidth < canvas.width) {
-    paddle.x += paddle.speed;
-    // keeps paddle from going too far left
-  } else if (paddleGoLeft && paddle.x > 0) {
-    paddle.x -= paddle.speed;
-  }
-}
-
 //Event listeners
 document.addEventListener("keydown", function (event) {
   if (event.keyCode == 37) {
@@ -141,3 +133,16 @@ document.addEventListener("keyup", function (event) {
     paddleGoRight = false;
   }
 });
+
+function movePaddle(): void {
+  if (!canvas) {
+    throw new Error("Error with canvas selector");
+  }
+  // keeps paddle from going too far right
+  if (paddleGoRight && paddle.x + paddleWidth < canvas.width) {
+    paddle.x += paddle.speed;
+    // keeps paddle from going too far left
+  } else if (paddleGoLeft && paddle.x > 0) {
+    paddle.x -= paddle.speed;
+  }
+}
