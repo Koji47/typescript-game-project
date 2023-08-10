@@ -20,7 +20,8 @@ canvas.style.border = "1px solid black";
 let life = 3,
   gameOver = false,
   paddleGoRight = false,
-  paddleGoLeft = false;
+  paddleGoLeft = false,
+  score = 0;
 
 // paddle attributes
 const paddleWidth = 100,
@@ -48,7 +49,7 @@ const ball = {
   y: paddle.y - ballRadius,
   radius: ballRadius,
   speed: 3,
-  dx: 3,
+  dx: 3 * (Math.random() * 2 - 1),
   dy: -3,
 };
 function drawPaddle(): void {
@@ -124,7 +125,11 @@ function ballCollisionWall() {
 }
 
 function ballCollisionPaddle() {
-  if (ball.y + ball.radius > paddle.y) {
+  if (
+    ball.x + ball.radius > paddle.x &&
+    ball.x - ball.radius < paddle.x + paddle.width &&
+    ball.y + ball.radius > paddle.y
+  ) {
     ball.dy = -ball.dy;
   }
 }
@@ -135,7 +140,7 @@ function resetBall() {
   }
   ball.x = canvas.width / 2;
   ball.y = paddle.y - ballRadius;
-  ball.dx = 3;
+  ball.dx = 3 * (Math.random() * 2 - 1);
   ball.dy = -3;
 }
 
@@ -146,8 +151,7 @@ let rowCount = 5,
   brickHeight = 18,
   brickPadding = 12,
   topMargin = 40,
-  leftMargin = 30,
-  score = 0;
+  leftMargin = 30;
 
 //Event listeners
 document.addEventListener("keydown", function (event) {
