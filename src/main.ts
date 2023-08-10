@@ -25,8 +25,10 @@ let life = 3,
 // paddle attributes
 const paddleWidth = 100,
   paddleHeight = 20,
-  paddleMarginBottom = 50;
+  paddleMarginBottom = 50,
+  BG_IMG = new Image();
 
+BG_IMG.src = "src/assets/BG_IMG.jpg";
 // paddle starting position
 const paddleX = canvas.width - paddleWidth;
 
@@ -36,7 +38,7 @@ const paddle = {
   y: canvas.height - paddleHeight - paddleMarginBottom,
   width: paddleWidth,
   height: paddleHeight,
-  speed: 5,
+  dx: 5,
 };
 
 // Ball
@@ -76,18 +78,30 @@ function drawBall(): void {
   context.closePath();
 }
 
-function draw() {
-  drawPaddle();
-  drawBall();
-}
-draw();
-
 function moveBall() {
   ball.x += ball.dx;
   ball.y += ball.dy;
 }
 
-function update() {}
+// draw function
+function draw() {
+  drawPaddle();
+  drawBall();
+}
+
+// update game function
+function update() {
+  movePaddle();
+}
+
+// game loop
+function loop() {
+  context?.drawImage(BG_IMG, 0, 0);
+  draw();
+  update();
+  requestAnimationFrame(loop);
+}
+loop();
 
 // Bricks
 let rowCount = 5,
@@ -99,30 +113,14 @@ let rowCount = 5,
   leftMargin = 30,
   score = 0;
 
-// const handleMovementKeyDown = (event:KeyboardEvent) => {
-
-// // switch (KeyboardEvent.key){
-// //     case "ArrowLeft":
-// //         paddleGoLeft = true;
-// //         break
-// //     case "ArrowRight":
-// //         paddleGoRight = true;
-// //         break
-
-// // }
-// if (event.keyCode == 37){
-//     paddleGoLeft = true;
-// } else if (event.keyCode == 39) {
-//     paddleGoRight = true;
-// }
-// };
-
 //Event listeners
 document.addEventListener("keydown", function (event) {
   if (event.keyCode == 37) {
     paddleGoLeft = true;
+    console.log("left");
   } else if (event.keyCode == 39) {
     paddleGoRight = true;
+    console.log("right");
   }
 });
 
@@ -140,9 +138,9 @@ function movePaddle(): void {
   }
   // keeps paddle from going too far right
   if (paddleGoRight && paddle.x + paddleWidth < canvas.width) {
-    paddle.x += paddle.speed;
+    paddle.x += paddle.dx;
     // keeps paddle from going too far left
   } else if (paddleGoLeft && paddle.x > 0) {
-    paddle.x -= paddle.speed;
+    paddle.x -= paddle.dx;
   }
 }
