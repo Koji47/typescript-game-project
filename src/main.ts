@@ -92,6 +92,7 @@ function update() {
   movePaddle();
   moveBall();
   ballCollisionWall();
+  ballCollisionPaddle();
 }
 
 // game loop
@@ -119,6 +120,12 @@ function ballCollisionWall() {
   if (ball.y + ball.radius > canvas.height) {
     life = life - 1;
     resetBall();
+  }
+}
+
+function ballCollisionPaddle() {
+  if (ball.y + ball.radius > paddle.y) {
+    ball.dy = -ball.dy;
   }
 }
 
