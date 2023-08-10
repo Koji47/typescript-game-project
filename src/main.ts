@@ -92,6 +92,7 @@ function draw() {
 // update game function
 function update() {
   movePaddle();
+  moveBall();
 }
 
 // game loop
