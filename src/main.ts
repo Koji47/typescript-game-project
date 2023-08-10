@@ -118,7 +118,18 @@ function ballCollisionWall() {
 
   if (ball.y + ball.radius > canvas.height) {
     life = life - 1;
+    resetBall();
   }
+}
+
+function resetBall() {
+  if (!canvas) {
+    throw new Error("Error with canvas selector");
+  }
+  ball.x = canvas.width / 2;
+  ball.y = paddle.y - ballRadius;
+  ball.dx = 3;
+  ball.dy = -3;
 }
 
 // Bricks
