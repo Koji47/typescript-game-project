@@ -16,15 +16,23 @@ if (!context) {
   throw new Error("Error with canvas selector");
 }
 
+// Canvas Border
+canvas.style.border = "1px solid black";
+
+let life = 3,
+  gameOver = false,
+  paddleGoRight = false,
+  paddleGoLeft = false;
+
 // paddle attributes
-const paddleWidth = 100;
-const paddleHeight = 20;
-const paddleMarginBottom = 50;
+const paddleWidth = 100,
+  paddleHeight = 20,
+  paddleMarginBottom = 50;
 
 // paddle starting position
 const paddleX = canvas.width - paddleWidth;
 
-// paddle variable
+// paddle variables
 const paddle = {
   x: canvas.width / 2 - paddleWidth / 2,
   y: canvas.height - paddleHeight - paddleMarginBottom,
@@ -33,15 +41,58 @@ const paddle = {
   speed: 5,
 };
 
-//paddle styling
-context.fillStyle = "#899499";
-context.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
-//stroke
-context.strokeStyle = "#36454F";
-context.strokeRect(paddle.x, paddle.y, paddle.width, paddle.height);
+// Ball
+const ballRadius = 8;
 
-let paddleGoRight = false;
-let paddleGoLeft = false;
+// ball variables
+const ball = {
+  x: canvas.width / 2,
+  y: paddle.y - ballRadius,
+  radius: ballRadius,
+  speed: 3,
+  dx: 3,
+  dy: -3,
+};
+function drawPaddle(): void {
+  if (!context) {
+    throw new Error("Error with canvas selector");
+  }
+  //paddle styling
+  context.fillStyle = "#899499";
+  context.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
+  //stroke
+  context.strokeStyle = "#36454F";
+  context.strokeRect(paddle.x, paddle.y, paddle.width, paddle.height);
+}
+
+function drawBall(): void {
+  if (!context) {
+    throw new Error("Error with canvas selector");
+  }
+  context.beginPath();
+  context.arc(ball.x, ball.y, ballRadius, 0, Math.PI * 2);
+
+  context.stroke();
+  context.closePath();
+}
+
+function draw() {
+  drawPaddle();
+
+  drawBall();
+}
+
+draw();
+
+// Bricks
+let rowCount = 5,
+  columnCount = 9,
+  brickWidth = 54,
+  brickHeight = 18,
+  brickPadding = 12,
+  topMargin = 40,
+  leftMargin = 30,
+  score = 0;
 
 // const handleMovementKeyDown = (event:KeyboardEvent) => {
 
@@ -61,14 +112,18 @@ let paddleGoLeft = false;
 // }
 // };
 
-const movePaddle = () => {
+function movePaddle(): void {
+  if (!canvas) {
+    throw new Error("Error with canvas selector");
+  }
+  // keeps paddle from going too far right
   if (paddleGoRight && paddle.x + paddleWidth < canvas.width) {
-    // keeps paddle from going too far right
     paddle.x += paddle.speed;
+    // keeps paddle from going too far left
   } else if (paddleGoLeft && paddle.x > 0) {
     paddle.x -= paddle.speed;
-  } // keeps paddle from going too far left
-};
+  }
+}
 
 //Event listeners
 document.addEventListener("keydown", function (event) {
