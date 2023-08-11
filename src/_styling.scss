@@ -1,0 +1,21 @@
+* {
+  padding: 0px;
+  margin: 0px;
+  font-family: "Press Start 2P", cursive;
+  font-size: 12px;
+}
+
+h1 {
+  font-size: 24px;
+}
+
+@media screen and (min-width: 1024px) {
+  .button-container__leftButton,
+  .button-container__rightButton {
+    display: none;
+  }
+
+  .stats {
+    width: 40vw;
+  }
+}
