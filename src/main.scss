@@ -6,7 +6,9 @@
   margin: 0px;
   font-family: "Press Start 2P", cursive;
 }
-
+h1 {
+  font-size: 24px;
+}
 body {
   background-image: linear-gradient($primary-purple, $primary-yellow);
   height: 100vh;
@@ -39,5 +41,12 @@ body {
     margin-left: 1rem;
     background-color: $primary-purple;
     color: $primary-yellow;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .button-container__leftButton,
+  .button-container__rightButton {
+    display: none;
   }
 }
