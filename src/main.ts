@@ -326,10 +326,8 @@ function gameOverFunction() {
 document.addEventListener("keydown", function (event) {
   if (event.keyCode == 37) {
     paddleGoLeft = true;
-    console.log("left");
   } else if (event.keyCode == 39) {
     paddleGoRight = true;
-    console.log("right");
   }
 });
 document.addEventListener("keyup", function (event) {
