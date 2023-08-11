@@ -1,7 +1,24 @@
 // Query selectors
 const canvas = document.querySelector<HTMLCanvasElement>("#brickBreaker");
+const livesCounter = document.querySelector<HTMLSpanElement>("#livesCounter");
+const scoreCounter = document.querySelector<HTMLSpanElement>("#scoreCounter");
+const leftButton = document.querySelector<HTMLButtonElement>(
+  ".button-container__leftButton"
+);
+const rightButton = document.querySelector<HTMLButtonElement>(
+  ".button-container__rightButton"
+);
 
 //null errors
+if (!livesCounter) {
+  throw new Error("Error with lives counter selector");
+}
+if (!scoreCounter) {
+  throw new Error("Error with score counter selector");
+}
+if (!leftButton || !rightButton) {
+  throw new Error("Error with button selector");
+}
 if (!canvas) {
   throw new Error("Error with canvas selector");
 }
@@ -9,7 +26,7 @@ if (!canvas) {
 //context 2D canvas
 const context = canvas.getContext("2d");
 
-//null errors
+//null error for context
 if (!context) {
   throw new Error("Error with canvas selector");
 }
@@ -21,7 +38,9 @@ let life = 3,
   gameOver = false,
   paddleGoRight = false,
   paddleGoLeft = false,
-  score = 0;
+  score = 0,
+  touchLeft = false,
+  touchRight = false;
 
 // paddle attributes
 const paddleWidth = 100,
@@ -43,6 +62,14 @@ const paddle = {
   dx: 5,
 };
 
+type ball = {
+  x: number;
+  y: number;
+  radius: number;
+  speed: number;
+  dx: number;
+  dy: number;
+};
 // ball variables
 const ball = {
   x: canvas.width / 2,
@@ -52,6 +79,7 @@ const ball = {
   dx: 3 * (Math.random() * 2 - 1),
   dy: -3,
 };
+
 type Brick = {
   rows: number;
   columns: number;
@@ -110,38 +138,15 @@ function drawBricks() {
   }
 }
 
-function ballCollisionBrick() {
-  for (let r = 0; r < brick.rows; r++) {
-    for (let c = 0; c < brick.columns; c++) {
-      const b = bricks[r][c];
-      if (b.status) {
-        if (
-          // right edge ball > left edge brick,
-          ball.x + ball.radius > b.x &&
-          //left edge ball < right edge brick,
-          ball.x - ball.radius < b.x + brick.width &&
-          //bottom edge ball > top edge brick,
-          ball.y + ball.radius > b.y &&
-          //top edge ball < bottom edge brick
-          ball.y - ball.radius < b.y + brick.height
-        ) {
-          b.status = false;
-          ball.dy = -ball.dy;
-        }
-      }
-    }
-  }
-}
-
 function drawPaddle(): void {
   if (!context) {
     throw new Error("Error with canvas selector");
   }
   //paddle styling
-  context.fillStyle = "#899499";
+  context.fillStyle = "#300066";
   context.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
   //stroke
-  context.strokeStyle = "#36454F";
+  context.strokeStyle = "#fff863";
   context.strokeRect(paddle.x, paddle.y, paddle.width, paddle.height);
 }
 
@@ -153,7 +158,7 @@ function drawBall(): void {
   context.arc(ball.x, ball.y, ballRadius, 0, Math.PI * 2);
   context.fillStyle = "#5a00b4";
   context.fill();
-  context.strokeStyle = "#300066";
+  context.strokeStyle = "#ffdc60";
   context.stroke();
   context.closePath();
 }
@@ -177,6 +182,9 @@ function update() {
   ballCollisionWall();
   ballCollisionPaddle();
   ballCollisionBrick();
+  updateLivesCounter();
+  updateScoreCounter();
+  gameOverFunction();
 }
 
 // game loop
@@ -184,11 +192,13 @@ function loop() {
   if (!canvas) {
     throw new Error("Error with canvas selector");
   }
-  context?.clearRect(0, 0, canvas.width, canvas.height);
-  context?.drawImage(BG_IMG, 0, 0);
-  draw();
-  update();
-  requestAnimationFrame(loop);
+  if (!gameOver) {
+    context?.clearRect(0, 0, canvas.width, canvas.height);
+    context?.drawImage(BG_IMG, 0, 0);
+    draw();
+    update();
+    requestAnimationFrame(loop);
+  }
 }
 loop();
 
@@ -207,6 +217,8 @@ function ballCollisionWall() {
 
   if (ball.y + ball.radius > canvas.height) {
     life = life - 1;
+    console.log(life);
+
     resetBall();
   }
 }
@@ -221,6 +233,44 @@ function ballCollisionPaddle() {
   }
 }
 
+function ballCollisionBrick() {
+  for (let r = 0; r < brick.rows; r++) {
+    for (let c = 0; c < brick.columns; c++) {
+      const b = bricks[r][c];
+      if (b.status) {
+        if (
+          // right edge ball > left edge brick,
+          ball.x + ball.radius > b.x &&
+          //left edge ball < right edge brick,
+          ball.x - ball.radius < b.x + brick.width &&
+          //bottom edge ball > top edge brick,
+          ball.y + ball.radius > b.y &&
+          //top edge ball < bottom edge brick
+          ball.y - ball.radius < b.y + brick.height
+        ) {
+          b.status = false;
+          ball.dy = -ball.dy;
+          score += 1;
+        }
+      }
+    }
+  }
+}
+
+function updateLivesCounter() {
+  if (!livesCounter) {
+    throw new Error("Error with lives counter selector");
+  }
+  livesCounter.textContent = life.toString();
+}
+
+function updateScoreCounter() {
+  if (!scoreCounter) {
+    throw new Error("Error with lives counter selector");
+  }
+  scoreCounter.textContent = score.toString();
+}
+
 function resetBall() {
   if (!canvas) {
     throw new Error("Error with canvas selector");
@@ -229,6 +279,12 @@ function resetBall() {
   ball.y = paddle.y - ballRadius;
   ball.dx = 3 * (Math.random() * 2 - 1);
   ball.dy = -3;
+}
+
+function gameOverFunction() {
+  if (life <= 0) {
+    gameOver = true;
+  }
 }
 
 //Event listeners
@@ -250,15 +306,20 @@ document.addEventListener("keyup", function (event) {
   }
 });
 
+leftButton.addEventListener("touchstart", () => (touchLeft = true));
+leftButton.addEventListener("touchend", () => (touchLeft = false));
+rightButton.addEventListener("touchstart", () => (touchRight = true));
+rightButton.addEventListener("touchend", () => (touchRight = false));
+
 function movePaddle(): void {
   if (!canvas) {
     throw new Error("Error with canvas selector");
   }
   // keeps paddle from going too far right
-  if (paddleGoRight && paddle.x + paddleWidth < canvas.width) {
+  if ((paddleGoRight || touchRight) && paddle.x + paddleWidth < canvas.width) {
     paddle.x += paddle.dx;
     // keeps paddle from going too far left
-  } else if (paddleGoLeft && paddle.x > 0) {
+  } else if ((paddleGoLeft || touchLeft) && paddle.x > 0) {
     paddle.x -= paddle.dx;
   }
 }
