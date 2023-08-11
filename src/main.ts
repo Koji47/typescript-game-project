@@ -45,14 +45,12 @@ let life = 3,
 const paddleWidth = 100,
   paddleHeight = 20,
   paddleMarginBottom = 50,
-  ballRadius = 8;
+  ballRadius = 8,
+  paddleX = canvas.width - paddleWidth;
 
 // Get background image
 const BG_IMG = new Image();
 BG_IMG.src = "src/assets/BG_IMG.jpg";
-
-// paddle starting position
-const paddleX = canvas.width - paddleWidth;
 
 // paddle variables
 type paddle = {
@@ -67,7 +65,7 @@ const paddle = {
   y: canvas.height - paddleHeight - paddleMarginBottom,
   width: paddleWidth,
   height: paddleHeight,
-  speed: 3,
+  speed: 5,
 };
 
 // ball variables
