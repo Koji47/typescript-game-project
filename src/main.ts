@@ -52,6 +52,87 @@ const ball = {
   dx: 3 * (Math.random() * 2 - 1),
   dy: -3,
 };
+type Brick = {
+  rows: number;
+  columns: number;
+  width: number;
+  height: number;
+  offSetLeft: number;
+  offSetTop: number;
+  marginTop: number;
+};
+// brick variables
+let brick = {
+  rows: 3,
+  columns: 5,
+  width: 55,
+  height: 20,
+  offSetLeft: 20,
+  offSetTop: 20,
+  marginTop: 40,
+  fillColour: "#ffdc60",
+  strokeColour: "#fff",
+};
+
+// create bricks
+let bricks: { x: number; y: number; status: boolean }[][] = [];
+
+function createBricks() {
+  for (let r = 0; r < brick.rows; r++) {
+    bricks[r] = [];
+    for (let c = 0; c < brick.columns; c++) {
+      bricks[r][c] = {
+        x: c * (brick.offSetLeft + brick.width) + brick.offSetLeft,
+        y:
+          r * (brick.offSetTop + brick.height) +
+          brick.offSetTop +
+          brick.marginTop,
+        status: true,
+      };
+    }
+  }
+}
+createBricks();
+
+// draw bricks
+function drawBricks() {
+  if (!context) {
+    throw new Error("Error with canvas selector");
+  }
+  for (let r = 0; r < brick.rows; r++) {
+    for (let c = 0; c < brick.columns; c++) {
+      const b = bricks[r][c];
+      if (b.status) {
+        context.fillStyle = brick.fillColour;
+        context.fillRect(b.x, b.y, brick.width, brick.height);
+      }
+    }
+  }
+}
+
+function ballCollisionBrick() {
+  for (let r = 0; r < brick.rows; r++) {
+    for (let c = 0; c < brick.columns; c++) {
+      const b = bricks[r][c];
+      if (b.status) {
+        if (
+          // right edge ball > left edge brick,
+          ball.x + ball.radius > b.x &&
+          //left edge ball < right edge brick,
+          ball.x - ball.radius < b.x + brick.width &&
+          //bottom edge ball > top edge brick,
+          ball.y + ball.radius > b.y &&
+          //top edge ball < bottom edge brick
+          ball.y - ball.radius < b.y + brick.height
+        ) {
+          b.status = false;
+          ball.dy = -ball.dy;
+        }
+      }
+    }
+  }
+}
+
 function drawPaddle(): void {
   if (!context) {
     throw new Error("Error with canvas selector");
@@ -86,6 +167,7 @@ function moveBall() {
 function draw() {
   drawPaddle();
   drawBall();
+  drawBricks();
 }
 
 // update game function
@@ -94,10 +176,15 @@ function update() {
   moveBall();
   ballCollisionWall();
   ballCollisionPaddle();
+  ballCollisionBrick();
 }
 
 // game loop
 function loop() {
+  if (!canvas) {
+    throw new Error("Error with canvas selector");
+  }
+  context?.clearRect(0, 0, canvas.width, canvas.height);
   context?.drawImage(BG_IMG, 0, 0);
   draw();
   update();
@@ -143,15 +230,6 @@ function resetBall() {
   ball.dx = 3 * (Math.random() * 2 - 1);
   ball.dy = -3;
 }
-
-// Bricks
-let rowCount = 5,
-  columnCount = 9,
-  brickWidth = 54,
-  brickHeight = 18,
-  brickPadding = 12,
-  topMargin = 40,
-  leftMargin = 30;
 
 //Event listeners
 document.addEventListener("keydown", function (event) {
