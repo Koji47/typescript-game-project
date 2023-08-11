@@ -3,12 +3,8 @@ const canvas = document.querySelector<HTMLCanvasElement>("#brickBreaker");
 const livesCounter = document.querySelector<HTMLSpanElement>("#livesCounter");
 const scoreCounter = document.querySelector<HTMLSpanElement>("#scoreCounter");
 const resetButton = document.querySelector<HTMLButtonElement>(".button-reset");
-const leftButton = document.querySelector<HTMLButtonElement>(
-  ".button-container__leftButton"
-);
-const rightButton = document.querySelector<HTMLButtonElement>(
-  ".button-container__rightButton"
-);
+const leftButton = document.querySelector<HTMLButtonElement>(".button-container__leftButton");
+const rightButton = document.querySelector<HTMLButtonElement>(".button-container__rightButton");
 
 //null errors
 if (!livesCounter) {
@@ -69,7 +65,7 @@ const paddle = {
   y: canvas.height - paddleHeight - paddleMarginBottom,
   width: paddleWidth,
   height: paddleHeight,
-  dx: 5,
+  speed: 3,
 };
 
 // ball variables
@@ -304,10 +300,10 @@ function movePaddle(): void {
   }
   // keeps paddle from going too far right
   if ((paddleGoRight || touchRight) && paddle.x + paddleWidth < canvas.width) {
-    paddle.x += paddle.dx;
+    paddle.x += paddle.speed;
     // keeps paddle from going too far left
   } else if ((paddleGoLeft || touchLeft) && paddle.x > 0) {
-    paddle.x -= paddle.dx;
+    paddle.x -= paddle.speed;
   }
 }
 
