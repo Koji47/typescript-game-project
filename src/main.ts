@@ -45,8 +45,10 @@ let life = 3,
 const paddleWidth = 100,
   paddleHeight = 20,
   paddleMarginBottom = 50,
-  ballRadius = 8,
-  BG_IMG = new Image();
+  ballRadius = 8;
+
+// Get background image
+const BG_IMG = new Image();
 BG_IMG.src = "src/assets/BG_IMG.jpg";
 
 // paddle starting position
@@ -341,11 +343,6 @@ rightButton.addEventListener("touchstart", () => (touchRight = true));
 rightButton.addEventListener("touchend", () => (touchRight = false));
 
 resetButton.addEventListener("click", () => {
-  resetGame();
-  gamePaused = false;
-});
-
-resetButton.addEventListener("hold", () => {
   resetGame();
   gamePaused = false;
 });
