@@ -1,5 +1,43 @@
 @import "./variables";
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
 
-canvas {
+* {
+  padding: 0px;
+  margin: 0px;
+  font-family: "Press Start 2P", cursive;
+}
+
+body {
   background-image: linear-gradient($primary-purple, $primary-yellow);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.stats {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  width: 80%;
+  color: $tertiary-yellow;
+}
+
+.button-container {
+  display: flex;
+  margin-top: 1rem;
+
+  &__leftButton,
+  &__rightButton {
+    width: 150px;
+    height: 50px;
+    border: none;
+    margin-top: 1rem;
+    border-radius: 10px;
+    margin-right: 1rem;
+    margin-left: 1rem;
+    background-color: $primary-purple;
+    color: $primary-yellow;
+  }
 }
