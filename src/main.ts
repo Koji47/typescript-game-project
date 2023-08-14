@@ -3,8 +3,12 @@ const canvas = document.querySelector<HTMLCanvasElement>("#brickBreaker");
 const livesCounter = document.querySelector<HTMLSpanElement>("#livesCounter");
 const scoreCounter = document.querySelector<HTMLSpanElement>("#scoreCounter");
 const resetButton = document.querySelector<HTMLButtonElement>(".button-reset");
-const leftButton = document.querySelector<HTMLButtonElement>(".button-container__leftButton");
-const rightButton = document.querySelector<HTMLButtonElement>(".button-container__rightButton");
+const leftButton = document.querySelector<HTMLButtonElement>(
+  ".button-container__leftButton"
+);
+const rightButton = document.querySelector<HTMLButtonElement>(
+  ".button-container__rightButton"
+);
 
 //null errors
 if (!livesCounter) {
@@ -50,7 +54,7 @@ const paddleWidth = 100,
 
 // Get background image
 const BG_IMG = new Image();
-BG_IMG.src = "src/assets/BG_IMG.jpg";
+BG_IMG.src = "./src/assets/BG_IMG.jpg";
 
 // paddle variables
 type paddle = {
