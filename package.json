@@ -1,8 +1,8 @@
 {
-  "homepage": "https://koji47.github.io/typescript-game-project",
+  "homepage": "https://Koji47.github.io/typescript-game-project",
   "author": "Chu Lam",
-  "name": "brick-breaker-game",
-  "private": false,
+  "name": "typescript-game-project",
+  "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
