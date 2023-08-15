@@ -54,7 +54,8 @@ const paddleWidth = 100,
 
 // Get background image
 const BG_IMG = new Image();
-BG_IMG.src = "./src/assets/BG_IMG.jpg";
+BG_IMG.src =
+  "https://static.vecteezy.com/system/resources/previews/023/507/102/large_2x/vaporwave-futuristic-80-s-landscape-and-sun-on-background-with-3d-grid-vector.jpg";
 
 // paddle variables
 type paddle = {
