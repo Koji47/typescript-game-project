@@ -1,3 +1,5 @@
+import imgUrl from "./assets/image.png";
+
 // Query selectors
 const canvas = document.querySelector<HTMLCanvasElement>("#brickBreaker");
 const livesCounter = document.querySelector<HTMLSpanElement>("#livesCounter");
@@ -37,7 +39,6 @@ canvas.style.border = "1px solid black";
 
 let life = 3,
   score = 0,
-  gameOver = false,
   gamePaused = false,
   paddleGoRight = false,
   paddleGoLeft = false,
@@ -49,13 +50,11 @@ let life = 3,
 const paddleWidth = 100,
   paddleHeight = 20,
   paddleMarginBottom = 50,
-  ballRadius = 8,
-  paddleX = canvas.width - paddleWidth;
+  ballRadius = 8;
 
 // Get background image
 const BG_IMG = new Image();
-BG_IMG.src =
-  "https://static.vecteezy.com/system/resources/previews/023/507/102/large_2x/vaporwave-futuristic-80-s-landscape-and-sun-on-background-with-3d-grid-vector.jpg";
+BG_IMG.src = imgUrl;
 
 // paddle variables
 type paddle = {
@@ -92,15 +91,7 @@ const ball = {
 };
 
 // brick variables
-type Brick = {
-  rows: number;
-  columns: number;
-  width: number;
-  height: number;
-  offSetLeft: number;
-  offSetTop: number;
-  marginTop: number;
-};
+
 let brick = {
   rows: 3,
   columns: 5,
@@ -290,7 +281,6 @@ function resetGame() {
   resetBall();
   updateLivesCounter();
   updateScoreCounter();
-  gameOver = false;
   gamePaused = false;
   loop();
 }
@@ -317,7 +307,6 @@ function gameOverFunction() {
     if (!resetButton) {
       throw new Error("Error with button selector");
     }
-    gameOver = true;
     gamePaused = true;
     resetButton.className = `button-reset show`;
   }
